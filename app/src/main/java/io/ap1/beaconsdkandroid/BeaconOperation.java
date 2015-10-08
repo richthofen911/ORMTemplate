@@ -2,6 +2,7 @@ package io.ap1.beaconsdkandroid;
 
 /**
  * This class contains all beacon operations definition.
+ * Created by richthofen80 on 10/2/15.
  */
 public class BeaconOperation{
 
