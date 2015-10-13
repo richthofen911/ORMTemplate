@@ -6,16 +6,16 @@ package io.ap1.beaconsdkandroid;
  */
 public class BeaconOperation{
 
-    public boolean equals (Beacon beacon1, Beacon beacon2){
-        return ((beacon1.getUuid().equals(beacon2.getUuid())) &&
+    public static boolean equals (Beacon beacon1, Beacon beacon2){
+        return ((beacon1.getUuid().replace("-", "").equals(beacon2.getUuid().replace("-", ""))) &&
         beacon1.getMajor().equals(beacon2.getMajor()) &&
         beacon1.getMinor().equals(beacon2.getMinor()));
     }
 
-    public boolean isLessThan(Beacon beacon1, Beacon beacon2){
+    public static boolean isLessThan(Beacon beacon1, Beacon beacon2){
         if(beacon1.equals(beacon2))
             return false;
-        if(beacon1.getUuid().equals(beacon2.getUuid())){
+        if(beacon1.getUuid().replace("-", "").equals(beacon2.getUuid().replace("-", ""))){
             if(beacon1.getMajor().equals(beacon2.getMajor())){
                 return (Integer.parseInt(beacon1.getMinor()) < Integer.parseInt(beacon2.getMinor()));
             }

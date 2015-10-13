@@ -24,13 +24,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ActivityFindBeacon"
-            android:label="@string/title_activity_find_beacon"
-            android:theme="@style/AppTheme.NoActionBar" >
-        </activity>
 
         <service android:name="com.perples.recosdk.RECOBeaconService" />
+        <service
+            android:name=".Utils.ServiceBeaconDetection"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
+        <service
+            android:name=".ServiceFindBeacon"
+            android:enabled="true"
+            android:exported="true" >
+        </service>
     </application>
 
 </manifest>

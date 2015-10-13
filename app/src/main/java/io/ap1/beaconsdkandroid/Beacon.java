@@ -8,60 +8,74 @@ import java.sql.Date;
 @DatabaseTable(tableName = "beacon")
 public class Beacon {
 
+    private final String LID = "lid";
     private final String ID = "id";
-    private final String CID = "cid";
-    private final String CREATEDON = "createdOn";
-    private final String LATITUDE = "latitude";
-    private final String LONGITUDE = "longitude";
-    private final String MACADDRESS = "macAddress";
     private final String UUID = "uuid";
     private final String MAJOR = "major";
     private final String MINOR = "minor";
-    private final String NICKNAME = "nickname";
-    private final String RSSI = "rssi";
-    private final String UNIT = "unit";
-    private final String URL = "url";
+    private final String LATITUDE = "lat";
+    private final String LONGITUDE = "lng";
     private final String X = "x";
     private final String Y = "y";
     private final String Z = "z";
-    private final String URLCONTENT = "urlContent";
+    private final String UNIT = "unit";
+    private final String NICKNAME = "nickName";
+    private final String RSSI = "rssi";
+    private final String TYPE = "type";
+    private final String CID = "cID";
+    private final String MACADDRESS = "macAddress";
+    private final String CREATEDDATE = "createdDate";
+    private final String LOCATION_FK = "location_fk";
+    private final String URL = "URL";
 
-    @DatabaseField(generatedId=true, useGetSet=true, columnName=ID)
+    @DatabaseField(generatedId=true, useGetSet=true, columnName=LID)
+    private int lID; // this field is for local auto increment
+    @DatabaseField(useGetSet=true, columnName=ID)
     private int id;
-    @DatabaseField(useGetSet = true, columnName = CID)
-    private String cid;
-    @DatabaseField(useGetSet = true, columnName = CREATEDON)
-    private Date createdOn;
-    @DatabaseField(useGetSet = true, columnName = LATITUDE)
-    private String latitude;
-    @DatabaseField(useGetSet = true, columnName = LONGITUDE)
-    private String longitude;
-    @DatabaseField(useGetSet = true, columnName = MACADDRESS)
-    private String macAddress;
     @DatabaseField(useGetSet = true, columnName = UUID)
     private String uuid;
     @DatabaseField(useGetSet = true, columnName = MAJOR)
     private String major;
     @DatabaseField(useGetSet = true, columnName = MINOR)
     private String minor;
+    @DatabaseField(useGetSet = true, columnName = LATITUDE)
+    private String lat;
+    @DatabaseField(useGetSet = true, columnName = LONGITUDE)
+    private String lng;
+    @DatabaseField(useGetSet = true, columnName = X)
+    private String x;  // for floor
+    @DatabaseField(useGetSet = true, columnName = Y)
+    private String y;  // for floor
+    @DatabaseField(useGetSet = true, columnName = Z)
+    private String z;  // for floor
+    @DatabaseField(useGetSet = true, columnName = UNIT)
+    private String unit;
     @DatabaseField(useGetSet = true, columnName = NICKNAME)
     private String nickName;
     @DatabaseField(useGetSet = true, columnName = RSSI)
     private String rssi;
-    @DatabaseField(useGetSet = true, columnName = UNIT)
-    private String unit;
+    @DatabaseField(useGetSet = true, columnName = TYPE)
+    private String type;
+    @DatabaseField(useGetSet = true, columnName = CID)
+    private String cID;
+    @DatabaseField(useGetSet = true, columnName = MACADDRESS)
+    private String macAddress;
+    @DatabaseField(useGetSet = true, columnName = CREATEDDATE)
+    private String createdDate;
+    @DatabaseField(useGetSet = true, columnName = LOCATION_FK)
+    private String location_fk;
     @DatabaseField(useGetSet = true, columnName = URL)
     private String url;
-    @DatabaseField(useGetSet = true, columnName = X)
-    private String x;  //what's this?
-    @DatabaseField(useGetSet = true, columnName = Y)
-    private String y;  //and this?
-    @DatabaseField(useGetSet = true, columnName = Z)
-    private String z;  //and this?
-    @DatabaseField(useGetSet = true, columnName = URLCONTENT)
-    private UrlContent urlContent;
 
     public Beacon(){
+    }
+
+    public int getLID(){
+        return lID;
+    }
+
+    public void setLID(int lID){
+        this.lID = lID;
     }
 
     public int getId(){
@@ -72,36 +86,36 @@ public class Beacon {
         this.id = id;
     }
 
-    public String getCid(){
-        return cid;
+    public String getCID(){
+        return cID;
     }
 
-    public void setCid(String cid){
-        this.cid = cid;
+    public void setCID(String cID){
+        this.cID = cID;
     }
 
-    public Date getCreatedOn(){
-        return createdOn;
+    public String getCreatedDate(){
+        return createdDate;
     }
 
-    public void setCreatedOn(Date createdOn){
-        this.createdOn = createdOn;
+    public void setCreatedDate(String createdOn){
+        this.createdDate = createdOn;
     }
 
-    public String getLatitude(){
-        return latitude;
+    public String getLat(){
+        return lat;
     }
 
-    public void setLatitude(String latitude){
-        this.latitude = latitude;
+    public void setLat(String latitude){
+        this.lat = latitude;
     }
 
-    public String getLongitude(){
-        return longitude;
+    public String getLng(){
+        return lng;
     }
 
-    public void setLongitude(String longitude){
-        this.longitude = longitude;
+    public void setLng(String longitude){
+        this.lng = longitude;
     }
 
     public String getMacAddress(){
@@ -160,14 +174,6 @@ public class Beacon {
         this.unit = unit;
     }
 
-    public String getUrl(){
-        return url;
-    }
-
-    public void setUrl(String url){
-        this.url = url;
-    }
-
     public String getX(){
         return x;
     }
@@ -192,12 +198,27 @@ public class Beacon {
         this.z = z;
     }
 
-    public UrlContent getUrlContent(){
-        return urlContent;
+    public String getType(){
+        return type;
     }
 
-    public void setUrlContent(UrlContent urlContent){
-        this.urlContent = urlContent;
+    public void setType(String type){
+        this.type = type;
     }
 
+    public String getLocation_fk(){
+        return location_fk;
+    }
+
+    public void setLocation_fk(String location_fk){
+        this.location_fk = location_fk;
+    }
+
+    public String getUrl(){
+        return url;
+    }
+
+    public void setUrl(String url){
+        this.url = url;
+    }
 }

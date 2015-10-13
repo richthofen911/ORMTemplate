@@ -1,4 +1,4 @@
-package io.ap1.beaconsdkandroid;
+package io.ap1.beaconsdkandroid.Utils;
 
 import android.app.Activity;
 import android.content.Context;
@@ -20,35 +20,43 @@ import com.perples.recosdk.RECOServiceConnectListener;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import io.ap1.beaconsdkandroid.Beacon;
+import io.ap1.beaconsdkandroid.BeaconOperation;
+
 
 public class ActivityBeaconDetectionByRECO extends Activity implements RECOServiceConnectListener, RECORangingListener{
 
     private final boolean DISCONTINUOUS_SCAN = false;
 
     protected boolean entered = false;
-    private int exitCount = 0;
-    private boolean exited = false;
-    private int rssiBorder = 0;
-    private int currentMinor = 0;
-    private int previousCount = 0;
+    protected int exitCount = 0;
+    protected boolean exited = false;
+    protected int rssiBorder = 0;
+    protected int currentMinor = 0;
+    protected int previousCount = 0;
+    protected boolean generalSearchMode = false;
+    protected ArrayList<Beacon> detectedBeacons;
 
     protected RECOBeaconManager mRecoManager = RECOBeaconManager.getInstance(this, false, false);
     protected ArrayList<RECOBeaconRegion> definedRegions;
     protected boolean alreadyPlaying = false;
 
-    protected void assignRegionArgs(String uuid, int borderValue){
+    protected void assignRegionArgs(String uuid, int borderValue, boolean useGeneralSearchMode){
         definedRegions = generateBeaconRegion(uuid);
         rssiBorder = borderValue;
+        generalSearchMode = useGeneralSearchMode;
     }
 
-    protected void assignRegionArgs(String uuid, int major, int borderValue){
+    protected void assignRegionArgs(String uuid, int major, int borderValue, boolean useGeneralSearchMode){
         definedRegions = generateBeaconRegion(uuid, major);
         rssiBorder = borderValue;
+        generalSearchMode = useGeneralSearchMode;
     }
 
-    protected void assignRegionArgs(String uuid, int major, int minor, int borderValue){
+    protected void assignRegionArgs(String uuid, int major, int minor, int borderValue, boolean useGeneralSearchMode){
         definedRegions = generateBeaconRegion(uuid, major, minor);
         rssiBorder = borderValue;
+        generalSearchMode = useGeneralSearchMode;
     }
 
     @Override
@@ -57,6 +65,8 @@ public class ActivityBeaconDetectionByRECO extends Activity implements RECOServi
 
         mRecoManager.setRangingListener(this);
         mRecoManager.bind(this);
+        Log.e("bind manager", "");
+        detectedBeacons = new ArrayList<>();
     }
 
     @Override
@@ -143,34 +153,61 @@ public class ActivityBeaconDetectionByRECO extends Activity implements RECOServi
     protected void actionOnExit(RECOBeacon recoBeacon){}
 
     private void inOut(int theRssi, RECOBeacon recoBeacon){
-        if(theRssi > rssiBorder){
-            if(!entered && !alreadyPlaying){
-                exitCount = 0;
-                entered = true;
-                exited = false;
-                Log.e("put a checkin", " with beacon " + recoBeacon.getProximityUuid() + " :: " + recoBeacon.getMajor() + " :: " + recoBeacon.getMinor());
-                currentMinor = recoBeacon.getMinor();
-                actionOnEnter(recoBeacon);
-            }else{
-                Log.e("entered already", ")");
-            }
-        }else{
-            if(recoBeacon.getMinor() == currentMinor){
-                if(exitCount < 3){
-                    exitCount++;
-                }else {
-                    if(!exited){
-                        entered = false;
-                        exited = true;
-                        currentMinor = 0;
-                        actionOnExit(recoBeacon);
-                    }else {
-                        Log.e("exited already", ")");
-                    }
+        if(!generalSearchMode){
+            if(theRssi > rssiBorder){ // if the beacon is detected and its rssi is stronger enough, which means it is the beacon for the specific location, not a random one
+                if(!entered && !alreadyPlaying){ //if haven't entered, do it
+                    exitCount = 0;
+                    entered = true;
+                    exited = false;
+                    Log.e("put a checkin", " with beacon " + recoBeacon.getProximityUuid() + " :: " + recoBeacon.getMajor() + " :: " + recoBeacon.getMinor());
+                    currentMinor = recoBeacon.getMinor();
+                    actionOnEnter(recoBeacon);
+                }else{
+                    Log.e("entered already", ")");
                 }
             }else{
-                Log.e("not this beacon", String.valueOf(recoBeacon.getMinor()));
+                if(recoBeacon.getMinor() == currentMinor){
+                    if(exitCount < 3){
+                        exitCount++;
+                    }else {
+                        if(!exited){ // if haven't exited, do it
+                            entered = false;
+                            exited = true;
+                            currentMinor = 0;
+                            actionOnExit(recoBeacon);
+                        }else {
+                            Log.e("exited already", ")");
+                        }
+                    }
+                }else{
+                    Log.e("not this beacon", String.valueOf(recoBeacon.getMinor()));
+                }
             }
+        }else {
+            Beacon newDetectedBeacon = new Beacon();
+            newDetectedBeacon.setUuid(recoBeacon.getProximityUuid());
+            newDetectedBeacon.setMajor(String.valueOf(recoBeacon.getMajor()));
+            newDetectedBeacon.setMinor(String.valueOf(recoBeacon.getMinor()));
+
+            boolean isNewDetected = true;
+            for(Beacon detectedBeacon: detectedBeacons){
+                if(BeaconOperation.equals(newDetectedBeacon, detectedBeacon)){
+                    isNewDetected = false;
+                    Log.e("beacon detected", "already");
+                    break;
+                }
+            }
+            if(isNewDetected){
+                actionOnEnter(recoBeacon);
+                Log.e("add new detected", "beacon");
+                detectedBeacons.add(newDetectedBeacon);
+            }
+            /*
+            if(!detectedBeacons.contains(newDetectedBeacon)){ // maybe need to use compare method
+                actionOnEnter(recoBeacon);
+                detectedBeacons.add(newDetectedBeacon);
+            }
+            */
         }
     }
 

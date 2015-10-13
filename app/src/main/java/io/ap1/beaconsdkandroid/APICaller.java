@@ -6,6 +6,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
@@ -89,6 +90,7 @@ public class APICaller {
                     return postParams;
                 }
             };
+            requestCallAPI.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
             requestQueue.add(requestCallAPI);
             timerRequestExec.schedule(new TimerTask() { //if the request doesn't get any response in 5 seconds, cancel it and pop up network issus
                 @Override
