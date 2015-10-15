@@ -31,11 +31,12 @@
             android:enabled="true"
             android:exported="true" >
         </service>
-        <service
-            android:name=".ServiceFindBeacon"
-            android:enabled="true"
-            android:exported="true" >
-        </service>
+
+        <activity
+            android:name=".ActivityBeaconDetail"
+            android:label="@string/title_activity_activity_beacon_detail"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
     </application>
 
 </manifest>

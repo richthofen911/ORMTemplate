@@ -10,12 +10,16 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.IBinder;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -36,29 +40,23 @@ import io.ap1.beaconsdkandroid.Utils.ServiceBeaconDetection;
 public class ActivityMain extends Activity {
 //public class ActivityMain extends ActivityFindBeacon {
 
-    private static Context context;
     final private String UUID_AprilBrother = "E2C56DB5-DFFB-48D2-B060-D0F5A71096E0";
     public static APICaller apiCaller;
     public static MySingletonRequestQueue mySingletonRequestQueue;
     public static AdapterBeacon adapterBeacon;
 
-    private ServiceFindBeacon.MyBinder myBinder;
+    private ServiceBeaconDetection.MyBinder myBinder;
 
-    private static FragmentTransaction ft;
-    private static FragmentBeaconDetail fragmentBeaconDetail;
-    private static Intent intentActivityMain;
-    private static FragmentManager fragmentManager;
+    private static Context contextActivityMain;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        context = getApplicationContext();
-        intentActivityMain = getIntent();
+        contextActivityMain = getApplicationContext();
         adapterBeacon = new AdapterBeacon(DataStore.detectedBeaconList);
         mySingletonRequestQueue = MySingletonRequestQueue.getInstance(this);
         apiCaller = APICaller.getInstance(getApplicationContext(), mySingletonRequestQueue);
-        fragmentManager = getFragmentManager();
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
         RecyclerView recyclerViewBeaconList = (RecyclerView) findViewById(R.id.RecyclerView_beaconList); //set up RecyclerView
@@ -66,9 +64,7 @@ public class ActivityMain extends Activity {
         recyclerViewBeaconList.setHasFixedSize(true);
         recyclerViewBeaconList.setAdapter(adapterBeacon);
 
-
         bindServiceFindBeacon();
-
 
         //assignRegionArgs(UUID_AprilBrother, -65, true);
 
@@ -95,21 +91,16 @@ public class ActivityMain extends Activity {
 
     }
 
-    public static void seeBeaconDetail(Bundle bundleBeaconData){
-        Toast.makeText(context, "Clicked", Toast.LENGTH_SHORT).show();
-        intentActivityMain.putExtras(bundleBeaconData);
-        ft = fragmentManager.beginTransaction();
-        fragmentBeaconDetail = new FragmentBeaconDetail();
-        ft.add(fragmentBeaconDetail, "FragmentBeaconDetail");
-        ft.commit();
-        ft.show(fragmentBeaconDetail);
+    public static void seeBeaconDetail(){
+        Toast.makeText(contextActivityMain, "Clicked", Toast.LENGTH_SHORT).show();
+        contextActivityMain.startActivity(new Intent(contextActivityMain, ActivityBeaconDetail.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
     }
 
     private ServiceConnection conn = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             Log.e("Service FindBeacon", "Connected");
-            myBinder = (ServiceFindBeacon.MyBinder) service;
+            myBinder = (ServiceBeaconDetection.MyBinder) service;
         }
 
         @Override
@@ -124,6 +115,12 @@ public class ActivityMain extends Activity {
 
     private void unbindServiceFindBeacon(){
         unbindService(conn);
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        unbindServiceFindBeacon();
     }
 
 }

@@ -31,7 +31,7 @@ public class Beacon {
     @DatabaseField(generatedId=true, useGetSet=true, columnName=LID)
     private int lID; // this field is for local auto increment
     @DatabaseField(useGetSet=true, columnName=ID)
-    private int id;
+    private String id;
     @DatabaseField(useGetSet = true, columnName = UUID)
     private String uuid;
     @DatabaseField(useGetSet = true, columnName = MAJOR)
@@ -78,11 +78,11 @@ public class Beacon {
         this.lID = lID;
     }
 
-    public int getId(){
+    public String getId(){
         return id;
     }
 
-    public void setId(int id){
+    public void setId(String id){
         this.id = id;
     }
 

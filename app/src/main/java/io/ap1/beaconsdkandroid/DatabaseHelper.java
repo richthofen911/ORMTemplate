@@ -107,6 +107,23 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper{
         }
     }
 
+    public static Beacon queryForOneBeacon(Beacon beaconFromDetectedList){
+        try {
+            List<Beacon> beaconWanted = beaconDao.queryBuilder().where().
+                    eq("major", beaconFromDetectedList.getMajor()).and().
+                    eq("minor", beaconFromDetectedList.getMinor()).query();
+            if(beaconWanted.size() > 0){
+                return beaconWanted.get(0);
+            }else {
+                Log.e("beacon not found", "from local db");
+                return null;
+            }
+        }catch (SQLException e){
+            Log.e("queryOneBeacon", "error");
+            return null;
+        }
+    }
+
     public static boolean isBeaconInLocalDB(Beacon beaconDetected){
         List<Beacon> beaconsInLocalDB = queryForAllBeacons();
         if(beaconsInLocalDB != null){

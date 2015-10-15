@@ -1,7 +1,9 @@
 package io.ap1.beaconsdkandroid;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,19 +37,25 @@ public class AdapterBeacon extends RecyclerView.Adapter<ViewHolderBeacon> {
         //if the beacon is in the database, put yes, else, put no
         if(DatabaseHelper.isBeaconInLocalDB(detectedBeaconList.get(position))){
             viewHolderBeacon.tv_beaconList_inDatabase.append("YES");
-            viewHolderBeacon.tv_beaconList_inDatabase.setClickable(true);
+
+            /*
             viewHolderBeacon.tv_beaconList_inDatabase.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //put beacon content into ActivityMain's intent
-                    Bundle beaconData = new Bundle();
-                    beaconData.putString("uuid", detectedBeaconList.get(position).getUuid());
-                    beaconData.putString("major", detectedBeaconList.get(position).getMajor());
-                    beaconData.putString("minor", detectedBeaconList.get(position).getMinor());
-                    beaconData.putString("url", detectedBeaconList.get(position).getUrl());
-                    ActivityMain.seeBeaconDetail(beaconData);
+                    BeaconPassMiddleWare.pushBeacon(detectedBeaconList.get(position));
+                    Log.e("beacon pushed", "" + detectedBeaconList.get(position).getId());
+
+                    //Bundle beaconData = new Bundle();
+                    //beaconData.putString("uuid", detectedBeaconList.get(position).getUuid());
+                    //beaconData.putString("major", detectedBeaconList.get(position).getMajor());
+                    //beaconData.putString("minor", detectedBeaconList.get(position).getMinor());
+                    //beaconData.putString("url", detectedBeaconList.get(position).getUrl());
+
+                    ActivityMain.seeBeaconDetail();
                 }
             });
+            */
         }
         else
             viewHolderBeacon.tv_beaconList_inDatabase.append("NO");

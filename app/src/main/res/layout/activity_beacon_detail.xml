@@ -1,0 +1,283 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:layout_marginTop="16dp"
+    android:layout_marginBottom="16dp"
+    tools:context=".ActivityBeaconDetail">
+
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/tv_beacon_detail_uuid"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="UUID: "/>
+
+            <EditText
+                android:id="@+id/et_beacon_detail_uuid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/tv_beacon_detail_major"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="Major: "/>
+
+            <EditText
+                android:id="@+id/et_beacon_detail_major"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/tv_beacon_detail_minor"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="Minor: "/>
+
+            <EditText
+                android:id="@+id/et_beacon_detail_minor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/tv_beacon_detail_rssi"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="RSSI: "/>
+
+            <EditText
+                android:id="@+id/et_beacon_detail_rssi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/tv_beacon_detail_macAddress"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="MACAddress: "/>
+
+            <EditText
+                android:id="@+id/et_beacon_detail_macAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/tv_beacon_detail_nickName"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="Nickname: "/>
+
+            <EditText
+                android:id="@+id/et_beacon_detail_nickName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/tv_beacon_detail_lat"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="Lat: "/>
+
+            <EditText
+                android:id="@+id/et_beacon_detail_lat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/tv_beacon_detail_lng"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="Lng: "/>
+
+            <EditText
+                android:id="@+id/et_beacon_detail_lng"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/tv_beacon_detail_x"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="X: "/>
+
+            <EditText
+                android:id="@+id/et_beacon_detail_x"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/tv_beacon_detail_y"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="Y: "/>
+
+            <EditText
+                android:id="@+id/et_beacon_detail_y"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/tv_beacon_detail_z"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="Z: "/>
+
+            <EditText
+                android:id="@+id/et_beacon_detail_z"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/tv_beacon_detail_unit"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="Unit: "/>
+
+            <EditText
+                android:id="@+id/et_beacon_detail_unit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/tv_beacon_detail_url"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="URL: "/>
+
+            <EditText
+                android:id="@+id/et_beacon_detail_url"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:inputType="textUri"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/tv_beacon_detail_cID"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:text="cID: "/>
+
+            <EditText
+                android:id="@+id/et_beacon_detail_cID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"/>
+        </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/btn_beacon_detail_remove"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="REMOVE"/>
+
+                <Button
+                    android:id="@+id/btn_beacon_detail_save"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="100dp"
+                    android:text="SAVE"/>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
+
+

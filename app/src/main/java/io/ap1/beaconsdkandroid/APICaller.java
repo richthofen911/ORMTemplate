@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
@@ -50,8 +51,11 @@ public class APICaller {
         APIUrlEncoded = APIUrlEncoded.replace("%3D", "=");
         APIUrlEncoded = APIUrlEncoded.replace("%26", "&");
         Log.e("url encoded", APIUrlEncoded);
-        if(postParams != null)
+        if(postParams != null && method == Request.Method.POST)
             this.postParams = postParams;
+        else {
+            Log.e("postParams", "is illegal here");
+        }
         requestMethod = method;
     }
 
@@ -76,18 +80,17 @@ public class APICaller {
                 public void onErrorResponse(VolleyError error){
                     requestCallAPI.markDelivered();
                     timerRequestExec.cancel();
-                    callback.onDelivered(error.toString());
+                    callback.onDelivered(error.toString() + "from error");
                 }
             }){
-                /*
-                protected Map<String, String> getParams() throws AuthFailureError{
-                  Map<String, String> params = new HashMap<>();
-                    params.put("param1", "aaa");
-                    return params;
-                }
-                */
+                @Override
                 protected Map<String, String> getParams() throws AuthFailureError{
                     return postParams;
+                    /*
+                    Map<String,String> params = new HashMap<>();
+                    params.put("hash", "1");
+                    return params;
+                    */
                 }
             };
             requestCallAPI.setRetryPolicy(new DefaultRetryPolicy(5000, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));

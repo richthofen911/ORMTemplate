@@ -1,6 +1,7 @@
 package io.ap1.beaconsdkandroid;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,5 +25,21 @@ public class ViewHolderBeacon extends RecyclerView.ViewHolder{
         tv_beaconList_major = (TextView) rootview.findViewById(R.id.tv_beaconList_major);
         tv_beaconList_minor = (TextView) rootview.findViewById(R.id.tv_beaconList_minor);
         tv_beaconList_inDatabase = (TextView) rootview.findViewById(R.id.tv_beaconList_inDB);
+        tv_beaconList_inDatabase.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Beacon beaconWanted = DatabaseHelper.queryForOneBeacon(DataStore.detectedBeaconList.get(selfPosition));
+                Log.e("clicked beacon", "position: " + selfPosition);
+                // if beaconWanted == null, create temp beacon object for potentially adding new beacon
+                if (beaconWanted == null)// if the beacon clicked is not in local db, just pass this to the MiddleWare
+                    beaconWanted = DataStore.detectedBeaconList.get(selfPosition);
+                BeaconPassMiddleWare.pushBeacon(beaconWanted);
+                Log.e("beacon pushed", "" + beaconWanted.getUuid() + "::" + beaconWanted.getMajor() + "::" + beaconWanted.getMinor());
+
+                ActivityMain.seeBeaconDetail();
+            }
+        });
     }
+
+
 }
