@@ -26,6 +26,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper{
 
     private static Dao<Beacon, Integer> beaconDao = null;
     private RuntimeExceptionDao<Beacon, Integer> beaconRuntimeExceptionDao = null;
+    private static DatabaseHelper instance;
 
     public DatabaseHelper(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -33,6 +34,13 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper{
 
     public DatabaseHelper(Context context, String databaseName, SQLiteDatabase.CursorFactory factory, int databaseVersion) {
         super(context, databaseName, factory, databaseVersion);
+    }
+
+    public static synchronized DatabaseHelper getHelper(Context context){
+        if(instance == null){
+            instance = new DatabaseHelper(context);
+        }
+        return instance;
     }
 
     @Override
@@ -90,10 +98,12 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper{
     }
 
     public void deleteAllBeacons(Context context){
-        this.close();
-        context.deleteDatabase(DATABASE_NAME);
-        OpenHelperManager.releaseHelper();
-        OpenHelperManager.setHelper(new DatabaseHelper(context));
+        try {
+            beaconDao.delete(queryForAllBeacons());
+        }catch (SQLException e){
+            Log.e("del all beacons error", e.toString());
+        }
+
     }
 
     public static List<Beacon> queryForAllBeacons(){

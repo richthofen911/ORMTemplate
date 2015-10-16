@@ -31,34 +31,15 @@ public class AdapterBeacon extends RecyclerView.Adapter<ViewHolderBeacon> {
 
     @Override
     public void onBindViewHolder(ViewHolderBeacon viewHolderBeacon, final int position){
-        viewHolderBeacon.tv_beaconList_uuid.append(detectedBeaconList.get(position).getUuid());
-        viewHolderBeacon.tv_beaconList_major.append(detectedBeaconList.get(position).getMajor());
-        viewHolderBeacon.tv_beaconList_minor.append(detectedBeaconList.get(position).getMinor());
+        viewHolderBeacon.tv_beaconList_uuid.setText("UUID: " + detectedBeaconList.get(position).getUuid());
+        viewHolderBeacon.tv_beaconList_major.setText("MAJOR: " + detectedBeaconList.get(position).getMajor());
+        viewHolderBeacon.tv_beaconList_minor.setText("MINOR: " + detectedBeaconList.get(position).getMinor());
         //if the beacon is in the database, put yes, else, put no
         if(DatabaseHelper.isBeaconInLocalDB(detectedBeaconList.get(position))){
-            viewHolderBeacon.tv_beaconList_inDatabase.append("YES");
-
-            /*
-            viewHolderBeacon.tv_beaconList_inDatabase.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //put beacon content into ActivityMain's intent
-                    BeaconPassMiddleWare.pushBeacon(detectedBeaconList.get(position));
-                    Log.e("beacon pushed", "" + detectedBeaconList.get(position).getId());
-
-                    //Bundle beaconData = new Bundle();
-                    //beaconData.putString("uuid", detectedBeaconList.get(position).getUuid());
-                    //beaconData.putString("major", detectedBeaconList.get(position).getMajor());
-                    //beaconData.putString("minor", detectedBeaconList.get(position).getMinor());
-                    //beaconData.putString("url", detectedBeaconList.get(position).getUrl());
-
-                    ActivityMain.seeBeaconDetail();
-                }
-            });
-            */
+            viewHolderBeacon.tv_beaconList_inDatabase.setText("In Database: " + "YES");
         }
         else
-            viewHolderBeacon.tv_beaconList_inDatabase.append("NO");
+            viewHolderBeacon.tv_beaconList_inDatabase.setText("In Database: " + "NO");
 
         viewHolderBeacon.selfPosition = position;
     }

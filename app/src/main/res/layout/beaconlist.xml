@@ -10,7 +10,6 @@
         android:id="@+id/tv_beaconList_uuid"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="UUID: "
         android:textSize="12sp"/>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -23,7 +22,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="MAJOR: "
             android:textSize="12sp"/>
 
         <TextView
@@ -32,7 +30,6 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
             android:gravity="center"
-            android:text="MINOR: "
             android:textSize="12sp"/>
 
         <TextView
@@ -41,7 +38,6 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
             android:gravity="center"
-            android:text="In Database: "
             android:textSize="12sp"
             android:clickable="true"/>
     </LinearLayout>

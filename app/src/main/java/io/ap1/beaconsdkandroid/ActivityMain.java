@@ -3,6 +3,7 @@ package io.ap1.beaconsdkandroid;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.ComponentName;
 import android.content.Context;
@@ -44,8 +45,9 @@ public class ActivityMain extends Activity {
     public static APICaller apiCaller;
     public static MySingletonRequestQueue mySingletonRequestQueue;
     public static AdapterBeacon adapterBeacon;
+    public static boolean ifCheckRemoteHash = false;
 
-    private ServiceBeaconDetection.MyBinder myBinder;
+    protected ServiceBeaconDetection.MyBinder myBinder;
 
     private static Context contextActivityMain;
 
@@ -85,10 +87,30 @@ public class ActivityMain extends Activity {
         findViewById(R.id.btn_checkRemoteDB).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                myBinder.getServerHash();
+                final ProgressDialog progressDialog = android.app.ProgressDialog.show(ActivityMain.this, "Update Beacon Information", "Please Wait");
+                myBinder.getServerHash(new ICallBackUpdateBeaconSet() {
+                    @Override
+                    public void onSuccess() {
+                        progressDialog.dismiss();
+                    }
+                });
             }
         });
+    }
 
+    @Override
+    protected void onRestart(){
+        super.onRestart();
+        if(ifCheckRemoteHash){
+            final ProgressDialog progressDialog = android.app.ProgressDialog.show(ActivityMain.this, "Update Beacon Information", "Please Wait");
+            ActivityMain.ifCheckRemoteHash = false;
+            myBinder.getServerHash(new ICallBackUpdateBeaconSet() {
+                @Override
+                public void onSuccess() {
+                    progressDialog.dismiss();
+                }
+            });
+        }
     }
 
     public static void seeBeaconDetail(){
@@ -109,11 +131,11 @@ public class ActivityMain extends Activity {
         }
     };
 
-    private void bindServiceFindBeacon(){
+    protected void bindServiceFindBeacon(){
         bindService(new Intent(ActivityMain.this, ServiceBeaconDetection.class), conn, BIND_AUTO_CREATE);
     }
 
-    private void unbindServiceFindBeacon(){
+    protected void unbindServiceFindBeacon(){
         unbindService(conn);
     }
 

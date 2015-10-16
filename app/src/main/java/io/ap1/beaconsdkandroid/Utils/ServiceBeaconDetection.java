@@ -1,5 +1,6 @@
 package io.ap1.beaconsdkandroid.Utils;
 
+import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
@@ -13,7 +14,7 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.google.gson.Gson;
 import com.j256.ormlite.android.apptools.OrmLiteBaseService;
-    import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.perples.recosdk.RECOBeacon;
 import com.perples.recosdk.RECOBeaconManager;
@@ -40,6 +41,7 @@ import io.ap1.beaconsdkandroid.Beacon;
 import io.ap1.beaconsdkandroid.BeaconOperation;
 import io.ap1.beaconsdkandroid.DataStore;
 import io.ap1.beaconsdkandroid.DatabaseHelper;
+import io.ap1.beaconsdkandroid.ICallBackUpdateBeaconSet;
 import io.ap1.beaconsdkandroid.MySingletonRequestQueue;
 
 public class ServiceBeaconDetection extends OrmLiteBaseService<DatabaseHelper> implements RECOServiceConnectListener, RECORangingListener{
@@ -68,7 +70,7 @@ public class ServiceBeaconDetection extends OrmLiteBaseService<DatabaseHelper> i
         spHashValue = getApplication().getSharedPreferences("HashValue.sp", 0);
         mRequestQueue = MySingletonRequestQueue.getInstance(this);
         apiCaller = APICaller.getInstance(this, mRequestQueue);
-        databaseHelper = new DatabaseHelper(this);
+        databaseHelper = DatabaseHelper.getHelper(this);
         try{
             mBeaconDao = getHelper().getBeaconDao();
         }catch (SQLException e){
@@ -124,8 +126,6 @@ public class ServiceBeaconDetection extends OrmLiteBaseService<DatabaseHelper> i
         rssiBorder = borderValue;
         generalSearchMode = useGeneralSearchMode;
     }
-
-
 
     /*
     @Override
@@ -288,7 +288,7 @@ public class ServiceBeaconDetection extends OrmLiteBaseService<DatabaseHelper> i
         Log.e("RECO ranging error:", recoErrorCode.toString());
     }
 
-    protected void getRemoteServerHash(){
+    protected void getRemoteServerHash(final ICallBackUpdateBeaconSet iCallBackUpdateBeaconSet){
         Map<String, String> postParams = new HashMap<>();
         final String currentLocalHashValue = spHashValue.getString("HashValue", "empty");
         if(currentLocalHashValue.equals("empty"))
@@ -306,8 +306,11 @@ public class ServiceBeaconDetection extends OrmLiteBaseService<DatabaseHelper> i
                     JSONObject jsonObject = new JSONObject(result);
                     if (!jsonObject.getString("hash").equals(currentLocalHashValue)) {
                         databaseHelper.deleteAllBeacons(ServiceBeaconDetection.this); //drop the old beacon database and create a new one
+                        clearDetectedBeaconList(); // clear current detected beacon list display
+                        detectedBeacons.clear();
                         JSONArray beaconSetRemote = jsonObject.getJSONArray("beacons");
                         updateLocalBeaconSet(beaconSetRemote);
+                        iCallBackUpdateBeaconSet.onSuccess();
                     }
                 } catch (JSONException e) {
                     Log.e("hash json error", e.toString());
@@ -329,20 +332,32 @@ public class ServiceBeaconDetection extends OrmLiteBaseService<DatabaseHelper> i
                         @Override
                         public void onDelivered(String result) {
                             Log.e("resp url content", result);
-                            FileOutputStream outputStream;
-                            try{
-                                outputStream = new FileOutputStream(new File(getExternalCacheDir().getPath() + beaconUrl + ".html"));
-                                outputStream.write(result.getBytes());
-                                outputStream.close();
-                            }catch (Exception e){
-                                Log.e("write url content", "error");
-                            }
+                            saveUrlContent(beaconUrl, result);
                         }
                     });
                 }
             }catch (JSONException e) {
                 Log.e("Beacons traversal error", e.toString());
             }
+        }
+    }
+
+    protected void saveUrlContent(String beaconUrl, String urlContent){
+        FileOutputStream outputStream;
+        try{
+            String fileName = beaconUrl.replace(":", "");
+            fileName = fileName.replace("/", "");
+            fileName = fileName.replace(".", "");
+            File fileUrlContent = new File(getExternalCacheDir().getPath() + "/" + fileName + ".html");
+            if(!fileUrlContent.exists()){
+                outputStream = new FileOutputStream(new File(getExternalCacheDir().getPath() + "/" + fileName + ".html"));
+                outputStream.write(urlContent.getBytes());
+                outputStream.close();
+                Log.e("write url content", "success");
+            }else
+                Log.e("write url content", "file exited already");  //may need to modify here for updating file ******
+        }catch (Exception e){
+            Log.e("write url content", "error");
         }
     }
 
@@ -358,21 +373,6 @@ public class ServiceBeaconDetection extends OrmLiteBaseService<DatabaseHelper> i
         for(int i = 0; i < DataStore.detectedBeaconList.size(); i++) {
             Log.e("detected list", DataStore.detectedBeaconList.get(i).getMajor() + ": " + DataStore.detectedBeaconList.get(i).getMinor());
         }
-
-        /*
-        if(DataStore.detectedBeaconList.size() >= 2){
-            addData(DataStore.detectedBeaconList.size() - 1, DataStore.detectedBeaconList.get(DataStore.detectedBeaconList.size() - 1));
-            DataStore.detectedBeaconList.set(DataStore.detectedBeaconList.size() - 2, newDetectedBeacon);
-            for(int i = 0; i < DataStore.detectedBeaconList.size(); i++){
-                Log.e("new beacon detected", DataStore.detectedBeaconList.get(i).getMajor() + ": " + DataStore.detectedBeaconList.get(i).getMinor());
-            }
-        }else {
-            addData(DataStore.detectedBeaconList.size(), newDetectedBeacon);
-            for(int i = 0; i < DataStore.detectedBeaconList.size(); i++) {
-                Log.e("new beacon detected", DataStore.detectedBeaconList.get(i).toString() + ": " + DataStore.detectedBeaconList.get(i).getMinor());
-            }
-        }
-        */
     }
 
     protected void addData(int position, Beacon newBeacon) {
@@ -381,6 +381,21 @@ public class ServiceBeaconDetection extends OrmLiteBaseService<DatabaseHelper> i
         if (position != DataStore.detectedBeaconList.size() - 1) {
             Log.e("notifyItemRangeChanged", "position extends");
             ActivityMain.adapterBeacon.notifyItemRangeChanged(position, DataStore.detectedBeaconList.size() - position);
+        }
+    }
+
+    protected void clearDetectedBeaconList(){
+        for(int i = DataStore.detectedBeaconList.size() - 1; i >= 0; i--){
+            deleteData(i);
+        }
+        Log.e("detected list", "will be refreshed");
+    }
+
+    protected void deleteData(int pos){
+        DataStore.detectedBeaconList.remove(pos);
+        ActivityMain.adapterBeacon.notifyItemRemoved(pos);
+        if(pos != DataStore.detectedBeaconList.size() - 1){
+            ActivityMain.adapterBeacon.notifyItemRangeChanged(pos, DataStore.detectedBeaconList.size() - pos);
         }
     }
 
@@ -422,8 +437,8 @@ public class ServiceBeaconDetection extends OrmLiteBaseService<DatabaseHelper> i
             stop(definedRegions);
         }
 
-        public void getServerHash(){
-            getRemoteServerHash();
+        public void getServerHash(ICallBackUpdateBeaconSet callBackUpdateBeaconSet){
+            getRemoteServerHash(callBackUpdateBeaconSet);
         }
     }
 

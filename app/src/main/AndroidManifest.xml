@@ -37,6 +37,11 @@
             android:label="@string/title_activity_activity_beacon_detail"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
+        <activity
+            android:name=".ActivityUrlContent"
+            android:label="@string/title_activity_activity_url_content"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
     </application>
 
 </manifest>

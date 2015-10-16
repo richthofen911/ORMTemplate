@@ -236,10 +236,17 @@
 
             <EditText
                 android:id="@+id/et_beacon_detail_url"
-                android:layout_width="wrap_content"
+                android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
                 android:inputType="textUri"/>
+
+            <TextView
+                android:id="@+id/tv_beacon_detail_openUrl"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:clickable="true"/>
         </LinearLayout>
 
         <LinearLayout

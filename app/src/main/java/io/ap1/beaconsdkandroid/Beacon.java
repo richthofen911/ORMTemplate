@@ -26,7 +26,7 @@ public class Beacon {
     private final String MACADDRESS = "macAddress";
     private final String CREATEDDATE = "createdDate";
     private final String LOCATION_FK = "location_fk";
-    private final String URL = "URL";
+    private final String BEACONURL = "URL";
 
     @DatabaseField(generatedId=true, useGetSet=true, columnName=LID)
     private int lID; // this field is for local auto increment
@@ -64,8 +64,8 @@ public class Beacon {
     private String createdDate;
     @DatabaseField(useGetSet = true, columnName = LOCATION_FK)
     private String location_fk;
-    @DatabaseField(useGetSet = true, columnName = URL)
-    private String url;
+    @DatabaseField(useGetSet = true, columnName = BEACONURL)
+    private String URL;
 
     public Beacon(){
     }
@@ -214,11 +214,11 @@ public class Beacon {
         this.location_fk = location_fk;
     }
 
-    public String getUrl(){
-        return url;
+    public String getURL(){
+        return URL;
     }
 
-    public void setUrl(String url){
-        this.url = url;
+    public void setURL(String url){
+        this.URL = url;
     }
 }
